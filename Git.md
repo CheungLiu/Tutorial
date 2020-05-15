@@ -108,7 +108,7 @@
    - 推送失败，因为你的小伙伴的最新提交和你试图推送的提交有冲突，解决办法也很简单，Git已经提示我们，先用git pull把最新的提交从origin/dev抓下来，然后，在本地合并，解决冲突，再推送
 
      $ git pull
-     There is no tracking information for the current branch.
+     ***There is no tracking information for the current branch.***
      Please specify which branch you want to merge with.
      See git-pull(1) for details.
 
@@ -122,6 +122,11 @@
 
      $ git branch --set-upstream-to=origin/dev dev
      Branch 'dev' set up to track remote branch 'dev' from 'origin'.
+
+   - 若git pull 失败 ,提示：***fatal: refusing to merge unrelated histories***
+
+     1.  是从远端库拉下来代码，本地要加入的代码放到远端库下载到本地的库，然后提交上去 ， 因为这样的话， 你基于的库就是远端的库，这是一次update
+     2. 使用强制的方法：git pull origin master ***--allow-unrelated-histories***
 
    - 再pull：
 
