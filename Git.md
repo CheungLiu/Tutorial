@@ -87,9 +87,9 @@
    - 你的小伙伴已经向origin/dev分支***推送了他***的提交，而碰巧你也对同样的文件作了修改，并试图推送
 
      $ git push origin dev
-     To github.com:michaelliao/learngit.git
+     To github.com:CheungLiu/Tutorial.git
       ! [rejected]        dev -> dev (non-fast-forward)
-     error: failed to push some refs to 'git@github.com:michaelliao/learngit.git'
+     error: failed to push some refs to 'git@github.com:CheungLiu/Tutorial.git'
      hint: Updates were rejected because the tip of your current branch is behind
      hint: its remote counterpart. Integrate the remote changes (e.g.
      hint: 'git pull ...') before pushing again.
