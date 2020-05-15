@@ -29,6 +29,16 @@
 
    + git checkout -- test.txt
      git checkout其实是用版本库里的版本替换工作区的版本，无论工作区是修改还是删除，都可以“一键还原”。
+     
+   + 确实要从版本库中删除该文件，那就用命令`git rm`删掉，并且`git commit`
+     
+     $ git rm test.txt
+     rm 'test.txt'
+     
+     $ git commit -m "remove test.txt"
+     [master d46f35e] remove test.txt
+      1 file changed, 1 deletion(-)
+      delete mode 100644 test.txt
 
 5. ##### 远程库
 
