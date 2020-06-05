@@ -7,6 +7,9 @@
    + git log --pretty=oneline
    + git log --graph --pretty=oneline --abbrev-commit
    + git relog
+   + git add .  提交被修改的和新建的文件，但不包括被删除的文件                            
+   + git add -u --update 更新所有改变的文件，即提交所有变化的文件
+   + git add -A --all 提交已被修改和已被删除文件，但是不包括新的文件
 
 2. ##### 分支
 
@@ -33,13 +36,9 @@
    + 确实要从版本库中删除该文件，那就用命令`git rm`删掉，并且`git commit`
      
      $ git rm test.txt
-     rm 'test.txt'
      
      $ git commit -m "remove test.txt"
-     [master d46f35e] remove test.txt
-      1 file changed, 1 deletion(-)
-      delete mode 100644 test.txt
-
+   
 5. ##### 远程库
 
    + git remote add origin git@github.com:CheungLiu/repo.git
