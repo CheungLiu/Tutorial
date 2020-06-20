@@ -22,11 +22,28 @@
 3. ##### 撤回
 
    + 场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+     
      * 命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销
+     
    + 场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用      命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+     
      + git reset HEAD <file>可以把暂存区的修改撤销掉（unstage），重新放回工作区
+     
    + 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考***版本回退***一节，不过前提是没有推送到远程库。
-     + git reset --hard HEAD^退回到上一个版本
+     
+   + 版本退回
+     
+     + ```
+       git reset --hard HEAD^退回到上一个版本
+       ```
+     
+     + 上上一个版本就是`HEAD^^`
+     
+   + git revert 是生成一个新的提交来撤销某次提交，**此次（就新生成的提交）提交之前的commit都会被保留**
+
+   + git reset 是回到某次提交，提交及之前的commit都会被保留：
+     	执行git reset --hard HEAD~1
+     	执行git reset --soft(默认) HEAD~1		此次之后的修改都会被退回到暂存区
 
 4. ##### 误删
 
@@ -38,7 +55,7 @@
      $ git rm test.txt
      
      $ git commit -m "remove test.txt"
-   
+
 5. ##### 远程库
 
    + git remote add origin git@github.com:CheungLiu/repo.git
