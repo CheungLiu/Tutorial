@@ -1,4 +1,4 @@
-### Java核心类
+## Java核心类
 
 1. #### 字符串和编码
 
@@ -43,11 +43,11 @@
        使用trim()方法可以移除字符串首尾空白字符。空白字符包括空格，\t，\r，\n
 
        - trim()并没有改变字符串的内容，而是返回了一个新字符串
-    
+        
          "  \tHello\r\n ".trim(); // "Hello"
          
        - strip()方法也可以移除字符串首尾空白字符。它和trim()不同的是，类似中文的空格字符\u3000也会被移除：
-    
+        
          "\u3000Hello\u3000".strip(); // "Hello"
     " Hello ".stripLeading(); // "Hello "
          " Hello ".stripTrailing(); // " Hello"
