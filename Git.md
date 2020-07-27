@@ -43,7 +43,7 @@
 
    + git reset 是回到某次提交，提交及之前的commit都会被保留：
      	执行git reset --hard HEAD~1
-     	执行git reset --soft(默认) HEAD~1		此次之后的修改都会被退回到暂存区
+       	执行git reset --soft(默认) HEAD~1		此次之后的修改都会被退回到暂存区
 
 4. ##### 误删
 

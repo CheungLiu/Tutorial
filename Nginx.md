@@ -45,10 +45,10 @@
 
      将对应端口（1027）放到防火墙外，使得外网可以访问
 
-     
-
      ```
-     sudo iptables -I INPUT -p tcp --dport 1027 -j ACCEPT
+sudo iptables -I INPUT -p tcp --dport 1027 -j ACCEPT
+     禁止指定的端口：
+     iptables -A INPUT -p tcp --dport 80 -j DROP
      sudo iptables-save
      ```
 

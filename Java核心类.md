@@ -179,9 +179,9 @@
        ```java
        Integer.getInteger("java.version"); // 版本号，11
        - 转换为char[]
-       String和char[]类型可以互相转换，方法是：
+       String和char[]类型可以互相c转换，方法是：
        ```java
-       har[] cs = "Hello".toCharArray(); // String -> char[]
+       char[] cs = "Hello".toCharArray(); // String -> char[]
        String s = new String(cs); // char[] -> String
        ```
        如果修改了char[]数组，String并不会改变：
@@ -205,41 +205,47 @@
       List<String> list = Arrays.asList("a","b","c","d");
       List<String> list = new ArrayList();//lsit.add()
       List<String> list = new ArrayList<>();//lsit.add()
-      List<String> list = List.("a","b","c","d");
+      
+      //对只读List调用add()、remove()方法会抛出UnsupportedOperationException。
+      //要注意的是，返回的List不一定就是ArrayList或者LinkedList，因为List只是一个接口，如果我们调用List.of()，它返回的是一个只读List：
+   List<String> list = List.of("a","b","c","d");
       List<Integer> list = List.of(1, 2, 5);
+      
+      List<String> temp = Lists.newArrayList();
       ```
-
+   ```
+      
       - 遍历List
-
+      
         ```java
         List<String> list = List.of("apple", "pear", "banana");
         for (int i=0; i<list.size(); i++) {
         	String s = list.get(i);
-        	System.out.println(s);
+     	System.out.println(s);
         }
-        ```
+   ```
 
-        Iterator本身也是一个对象，但它是由List的实例调用iterator()方法的时候创建的。Iterator对象知道如何遍历一个List，并且不同的List类型，返回的Iterator对象实现也是不同
+     Iterator本身也是一个对象，但它是由List的实例调用iterator()方法的时候创建的。Iterator对象知道如何遍历一个List，并且不同的List类型，返回的Iterator对象实现也是不同
 
         Iterator对象有两个方法：boolean hasNext()判断是否有下一个元素，E next()返回下一个元素
-
+          
         ```java
         for (Iterator<String> it = list.iterator(); it.hasNext(); ) {
         	String s = it.next();
-        	System.out.println(s);
+     	System.out.println(s);
         }
-        ```
-
+     ```
+      
         实际上，只要实现了Iterable接口的集合类都可以直接用for each循环来遍历，Java编译器本身并不知道如何遍历集合对象，但它会自动把for each循环变成Iterator的调用，原因就在于Iterable接口定义了一个Iterator<E> iterator()方法，强迫集合类必须返回一个Iterator实例
-
+      
         ```java
         for (String s : list) {
-        	System.out.println(s);
+     	System.out.println(s);
         }
-        ```
+     ```
 
         Java 8 中我们可以通过 `::` 关键字来访问类的构造方法，对象方法，静态方法
-
+          
         ```java
         public class Main {
             public static void printValur(String str) {
@@ -262,52 +268,54 @@
                 //在JDK8中，接口Iterable 8中默认实现了forEach方法，调用了 JDK8中增加的接口Consumer内的accept方法，执行传入的方法参数
                 Consumer<String> c = Main::printValur;
                 list.forEach(x -> c.accept(x));
-            }
+         }
         }
-        ```
-
-        　**另外补充一下，JDK8改动的，在接口里面可以有默认实现，就是在接口前加上default，实现这个接口的函数对于默认实现的方法可以不用再实现了。类似的还有static方法。现在这种接口除了上面提到的，还有BiConsumer,BiFunction,BinaryOperation等，在java.util.function包下的接口，大多数都有，后缀为Supplier的接口没有和别的少数接口**
-
+     ```
+      
+     　**另外补充一下，JDK8改动的，在接口里面可以有默认实现，就是在接口前加上default，实现这个接口的函数对于默认实现的方法可以不用再实现了。类似的还有static方法。现在这种接口除了上面提到的，还有BiConsumer,BiFunction,BinaryOperation等，在java.util.function包下的接口，大多数都有，后缀为Supplier的接口没有和别的少数接口**
+      
       - List->Array
-
+      
         1. ```java
            这种方法会丢失类型信息，所以实际应用很少
-           List<String> list = List.of("apple", "pear", "banana");
+        List<String> list = List.of("apple", "pear", "banana");
            Object[] array = list.toArray();
-           ```
+     ```
 
         2. ```java
            给toArray(T[])传入一个类型相同的Array，List内部自动把元素复制到传入的Array中
-           List<Integer> list = List.of(12, 34, 56);
+        List<Integer> list = List.of(12, 34, 56);
            Integer[] array = list.toArray(new Integer[3]);
            ```
-
+          
         3. ```java
            实际上可以传入其他类型的数组
            List<Integer> list = List.of(12, 34, 56);
            Number[] array = list.toArray(new Number[3]);
            如果我们传入类型不匹配的数组，例如，String[]类型的数组，由于List的元素是Integer，所以无法放入String数组，这个方法会抛出ArrayStoreException
            
-           //最常用的是传入一个“恰好”大小的数组：
+        //最常用的是传入一个“恰好”大小的数组：
            Integer[] array = list.toArray(new Integer[list.size()]);
            ```
-
+          
         4. ```java
            //函数式写法
-           最后一种更简洁的写法是通过List接口定义的T[] toArray(IntFunction<T[]> generator)方法：
+        最后一种更简洁的写法是通过List接口定义的T[] toArray(IntFunction<T[]> generator)方法：
            Integer[] array = list.toArray(Integer[]::new);
-           ```
+        ```
 
       - Array->List
-
+      
         ```java
         Integer[] array = { 1, 2, 3 };
         List<Integer> list = List.of(array);
         //要注意的是，返回的List不一定就是ArrayList或者LinkedList，因为List只是一个接口，如果我们调用List.of()，它返回的是一个只读List
-        List<Integer> list = List.of(12, 34, 56);
-        list.add(999); // 对只读List调用add()、remove()方法会抛出UnsupportedOperationException
         ```
 
+       List<Integer> list = List.of(12, 34, 56);
+        list.add(999); // 对只读List调用add()、remove()方法会抛出UnsupportedOperationException
+        ```
+          
         ```java
         //对于JDK 11之前的版本，使用Arrays.asList(T...)方法把数组转换成List
         List<String> List = Arrays.asList("a","b","c","d");
