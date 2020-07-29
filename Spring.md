@@ -72,46 +72,161 @@ FileSystemXmlApplicationContext
 
   （1）在 spring 配置文件中，使用 bean 标签，标签里面添加对应属性，就可以实现对象创建
   （2）在 bean 标签有很多属性，介绍常用的属性
-  * id 属性：唯一标识
-  * class 属性：类全路径（包类路径）
+
+  ​			id 属性：唯一标识
+
+  ​			class 属性：类全路径（包类路径）
 
   （3）创建对象时候，默认也是执行无参数构造方法完成对象创建
 
 - 基于 xml 方式注入属性
-  （1）DI：依赖注入，就是注入属性
 
-  - ***IOC和DI的区别：DI是IOC中的一种具体实现，表示依赖注入，需要在创建对象的基础之上完成***
+  **DI：依赖注入，就是注入属性**
 
-    1. 使用 set 方法进行注入
+  ***IOC和DI的区别：DI是IOC中的一种具体实现，表示依赖注入，需要在创建对象的基础之上完成***
 
-       - 创建类，定义属性和对应的 set 方法
+  1. 使用 set 方法进行注入
 
-       - 在 spring 配置文件配置对象创建，配置属性注入
+     - 创建类，定义属性和对应的 set 方法
 
-         ```xml
-         <!--2 set 方法注入属性-->
-         <bean id="book" class="com.atguigu.spring5.Book">
-          	<!--使用 property 完成属性注入
-         	 name：类里面属性名称
-         	 value：向属性注入的值
-              -->
-              <property name="bname" value="易筋经"></property>
-              <property name="bauthor" value="达摩老祖"></property>
-         </bean>
-         ```
+     - 在 spring 配置文件配置对象创建，配置属性注入
 
-    2. 使用有参数构造进行注入
+       ```xml
+       <!--2 set 方法注入属性-->
+       <bean id="book" class="com.atguigu.spring5.Book">
+        	<!--使用 property 完成属性注入
+       	 name：类里面属性名称
+       	 value：向属性注入的值
+            -->
+            <property name="bname" value="易筋经"></property>
+            <property name="bauthor" value="达摩老祖"></property>
+       </bean>
+       ```
 
-       - 创建类，定义属性，创建属性对应有参数构造方法
+  2. 使用有参数构造进行注入
 
-       - 在 spring 配置文件中进行配置
+     - 创建类，定义属性，创建属性对应有参数构造方法
 
-         ```xml
-         <!--3 有参数构造注入属性-->
-         <bean id="orders" class="com.atguigu.spring5.Orders">
-              <constructor-arg name="oname" value="电脑"></constructor-arg>
-              <constructor-arg name="address" value="China"></constructor-arg>
-         </bean>
-         ```
+     - 在 spring 配置文件中进行配置
 
-    3. p 名称空间注入（了解）
+       ```xml
+       <!--3 有参数构造注入属性-->
+       <bean id="orders" class="com.atguigu.spring5.Orders">
+            <constructor-arg name="oname" value="电脑"></constructor-arg>
+            <constructor-arg name="address" value="China"></constructor-arg>
+       </bean>
+       ```
+
+  3. p 名称空间注入（了解）
+
+#### 2、IOC 操作 Bean 管理（xml 注入其他类型属性）
+
+- 字面量
+
+  - null
+  - 属性值包含特殊符号
+
+- 注入属性-外部 bean
+
+  （1）创建两个类 service 类和 dao 类
+  （2）***在 service 调用 dao 里面的方法***
+  （3）在 spring 配置文件中进行配置
+
+  ```xml
+  <!--1 service 和 dao 对象创建-->
+  <bean id="userService" class="com.atguigu.spring5.service.UserService">
+      <!--注入 userDao 对象
+      name 属性：类里面属性名称
+      ref 属性：创建 userDao 对象 bean 标签 id 值
+      -->
+  	<property name="userDao" ref="userDaoImpl"></property>
+  </bean>
+  <bean id="userDaoImpl" class="com.atguigu.spring5.dao.UserDaoImpl"></bean>
+  ```
+
+- 注入属性-内部 bean
+
+  ```xml
+  <!--内部 bean-->
+  <bean id="emp" class="com.atguigu.spring5.bean.Emp">
+      <!--设置两个普通属性-->
+      <property name="ename" value="lucy"></property>
+      <property name="gender" value="女"></property>
+          <!--设置对象类型属性-->
+          <property name="dept">
+          <bean id="dept" class="com.atguigu.spring5.bean.Dept">
+          	<property name="dname" value="安保部"></property>
+          </bean>
+      </property>
+  </bean>
+  ```
+
+- 注入属性-级联赋值
+
+  (1)第一种写法（后面的bean不同与外部注入，级联有value）
+
+  ```xml
+  <!--级联赋值-->
+  <bean id="emp" class="com.atguigu.spring5.bean.Emp">
+  <!--设置两个普通属性-->
+      <property name="ename" value="lucy"></property>
+      <property name="gender" value="女"></property>
+          <!--级联赋值-->
+          <property name="dept" ref="dept"></property>
+          </bean>
+      <bean id="dept" class="com.atguigu.spring5.bean.Dept">
+      <property name="dname" value="财务部"></property>
+  </bean>
+  ```
+
+  （2）第二种写法（需要在Emp中实现dname的get方法）
+
+  ```xml
+  <!--级联赋值-->
+  <bean id="emp" class="com.atguigu.spring5.bean.Emp">
+      <!--设置两个普通属性-->
+      <property name="ename" value="lucy"></property><property name="gender" value="女"></property>
+      <!--级联赋值-->
+      <property name="dept" ref="dept"></property>
+      <property name="dept.dname" value="技术部"></property>
+  </bean>
+  <bean id="dept" class="com.atguigu.spring5.bean.Dept">
+      <property name="dname" value="财务部"></property>
+  </bean>
+  ```
+
+#### 3、IOC 操作 Bean 管理（xml 注入集合属性）
+
+1、注入数组类型属性 
+
+2、注入 List 集合类型属性 
+
+3、注入 Map 集合类型属性
+
+- （1）创建类，定义数组、list、map、set 类型属性，生成对应 set 方法
+- （2）在 spring 配置文件进行配置
+
+4、在集合里面设置对象类型值
+
+```xml
+<!--创建多个 course 对象-->
+<bean id="course1" class="com.atguigu.spring5.collectiontype.Course">
+ 	<property name="cname" value="Spring5 框架"></property>
+</bean>
+<bean id="course2" class="com.atguigu.spring5.collectiontype.Course">
+ 	<property name="cname" value="MyBatis 框架"></property>
+</bean>
+<!--注入 list 集合类型，值是对象-->
+<property name="courseList">
+     <list>
+         <ref bean="course1"></ref>
+         <ref bean="course2"></ref>
+     </list>
+</property>
+```
+
+5、把集合注入部分提取出来
+
+第一步：在 spring 配置文件中引入名称空间 util
+
+第二步：使用 util 标签完成 list 集合注入提取
