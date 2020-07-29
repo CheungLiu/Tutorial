@@ -56,7 +56,7 @@ ClassPathXmlApplicationContext
 FileSystemXmlApplicationContext
 ```
 
-### 3、IOC	操作 Bean 管理
+### 3、IOC	操作 Bean 管理（xml）
 
 1、什么是 Bean 管理
 （0）Bean 管理指的是两个操作
@@ -152,10 +152,10 @@ FileSystemXmlApplicationContext
       <!--设置两个普通属性-->
       <property name="ename" value="lucy"></property>
       <property name="gender" value="女"></property>
-          <!--设置对象类型属性-->
-          <property name="dept">
+      <!--设置对象类型属性-->
+      <property name="dept">
           <bean id="dept" class="com.atguigu.spring5.bean.Dept">
-          	<property name="dname" value="安保部"></property>
+              <property name="dname" value="安保部"></property>
           </bean>
       </property>
   </bean>
@@ -163,7 +163,7 @@ FileSystemXmlApplicationContext
 
 - 注入属性-级联赋值
 
-  (1)第一种写法（后面的bean不同与外部注入，级联有value）
+  (1)第一种写法（后面的bean不同与外部注入bean，级联有value）
 
   ```xml
   <!--级联赋值-->
@@ -172,9 +172,9 @@ FileSystemXmlApplicationContext
       <property name="ename" value="lucy"></property>
       <property name="gender" value="女"></property>
           <!--级联赋值-->
-          <property name="dept" ref="dept"></property>
-          </bean>
-      <bean id="dept" class="com.atguigu.spring5.bean.Dept">
+      <property name="dept" ref="dept"></property>
+  </bean>
+  <bean id="dept" class="com.atguigu.spring5.bean.Dept">
       <property name="dname" value="财务部"></property>
   </bean>
   ```
@@ -185,7 +185,8 @@ FileSystemXmlApplicationContext
   <!--级联赋值-->
   <bean id="emp" class="com.atguigu.spring5.bean.Emp">
       <!--设置两个普通属性-->
-      <property name="ename" value="lucy"></property><property name="gender" value="女"></property>
+      <property name="ename" value="lucy"></property>
+      <property name="gender" value="女"></property>
       <!--级联赋值-->
       <property name="dept" ref="dept"></property>
       <property name="dept.dname" value="技术部"></property>
@@ -230,3 +231,111 @@ FileSystemXmlApplicationContext
 第一步：在 spring 配置文件中引入名称空间 util
 
 第二步：使用 util 标签完成 list 集合注入提取
+
+#### 4、IOC 操作 Bean 管理（FactoryBean）
+
+```
+1、Spring 有两种类型 bean，一种普通 bean，另外一种工厂 bean（FactoryBean）
+2、普通 bean：在配置文件中定义 bean 类型就是返回类型
+3、工厂 bean：在配置文件定义 bean 类型可以和返回类型不一样
+	第一步 创建类，让这个类作为工厂 bean，实现接口 FactoryBean
+	第二步 实现接口里面的方法，在实现的方法中定义返回的 bean 类型	
+```
+
+#### 5、IOC 操作 Bean 管理（bean 作用域）  
+
+1. 在 Spring 里面，设置创建 bean 实例是单实例还是多实例
+
+2. 在 Spring 里面，默认情况下， bean 是单实例对象
+
+3. 如何设置单实例还是多实例
+
+   ```
+   （1）在 spring 配置文件 bean 标签里面有属性（scope）用于设置单实例还是多实例
+   （2） scope 属性值
+       第一个值 默认值， singleton，表示是单实例对象
+       第二个值 prototype，表示是多实例对象
+   （3） singleton 和 prototype 区别
+       第一 singleton 单实例， prototype 多实例
+       第二 设置 scope 值是 singleton 时候，加载 spring 配置文件时候就会创建单实例对象
+       	设置 scope 值是 prototype 时候，不是在加载 spring 配置文件时候创建 对象，在调用getBean方法时候创建多实例对象
+   ```
+
+#### 6、IOC 操作 Bean 管理（bean 生命周期）
+
+1. 生命周期 
+
+   （1）从对象创建到对象销毁的过程
+
+2. bean 生命周期
+
+```
+（1）通过构造器创建 bean 实例（无参数构造）
+（2）为 bean 的属性设置值和对其他 bean 引用（调用 set 方法）
+（3）把 bean 实例传递 bean 后置处理器的方法 postProcessBeforeInitialization
+（4）调用 bean 的初始化的方法（需要进行配置初始化的方法）（5）把 bean 实例传递 bean 后置处理器的方法 postProcessAfterInitialization
+（6） bean 可以使用了（对象获取到了）
+（7）当容器关闭时候，调用 bean 的销毁的方法（需要进行配置销毁的方法）
+```
+
+#### 7、IOC 操作 Bean 管理（xml 自动装配）
+
+实际中用的机率很小，为了方便一般采用注解（这里讲的是配置文件 xml 也能做到装配）
+
+1. 什么是自动装配
+
+   根据指定装配规则（属性名称或者属性类型）， Spring 自动将匹配的属性值进行注入
+
+2. 演示自动装配过程
+
+    （1）根据属性名称自动注入
+
+   ```xml
+   <bean id="emp" class="com.atguigu.spring5.autowire.Emp" autowire="byName">
+   </bean>
+   <bean id="dept" class="com.atguigu.spring5.autowire.Dept"></bean>
+   ```
+
+   （2）根据属性类型自动注入
+
+   ```xml
+   <bean id="emp" class="com.atguigu.spring5.autowire.Emp" autowire="byType">
+   </bean>
+   <bean id="dept" class="com.atguigu.spring5.autowire.Dept"></bean>
+   ```
+
+#### 8、IOC 操作 Bean 管理（外部属性文件)  
+
+1. 直接配置数据库信息
+
+   ```xml
+   （1）配置德鲁伊连接池
+   （2）引入德鲁伊连接池依赖 jar 包
+   <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+       <property name="driverClassName" value="com.mysql.jdbc.Driver"></property>
+       <property name="url" value="jdbc:mysql://localhost:3306/userDb"></property>
+       <property name="username" value="root"></property>
+       <property name="password" value="root"></property>
+   </bean>
+   ```
+
+2. 引入外部属性文件配置数据库连接池
+
+   ```xml
+   （1）创建外部属性文件， properties 格式文件，写数据库信息
+   （2） 把外部 properties 属性文件引入到 spring 配置文件中
+   	 * 引入 context 名称空间
+   <!--引入外部属性文件-->
+   //自己建立的一个外部配置文件
+   <context:property-placeholder location="classpath:jdbc.properties"/>
+   <!--配置连接池-->
+   <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+       <property name="driverClassName" value="${prop.driverClass}"></property>
+       <property name="url" value="${prop.url}"></property>
+       <property name="username" value="${prop.userName}"></property>
+       <property name="password" value="${prop.password}"></property>
+   </bean>
+   ```
+
+### 3、IOC 操作 Bean 管理（注解）
+
