@@ -308,8 +308,10 @@
       
         ```java
         Integer[] array = { 1, 2, 3 };
+        //好像被舍弃
         List<Integer> list = List.of(array);
         //要注意的是，返回的List不一定就是ArrayList或者LinkedList，因为List只是一个接口，如果我们调用List.of()，它返回的是一个只读List
+        List<Integer> list = Arrays.asList(array);
         ```
 
        List<Integer> list = List.of(12, 34, 56);
